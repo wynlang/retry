@@ -1,0 +1,4 @@
+[project]
+name = "retry"
+version = "0.1.0"
+description = "Retry with exponential backoff"

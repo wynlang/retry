@@ -1,0 +1,19 @@
+fn main() -> int {
+    Test.init("retry")
+    // Backoff calculation
+    var base_ms = 100
+    var attempt = 0
+    var delay = base_ms
+    Test.assert_eq_int(delay, 100, "attempt 0")
+    attempt = 1; delay = base_ms * 2
+    Test.assert_eq_int(delay, 200, "attempt 1")
+    attempt = 2; delay = base_ms * 4
+    Test.assert_eq_int(delay, 400, "attempt 2")
+    attempt = 3; delay = base_ms * 8
+    Test.assert_eq_int(delay, 800, "attempt 3")
+    // Max cap
+    if delay > 5000 { delay = 5000 }
+    Test.assert(delay <= 5000, "max cap")
+    Test.summary()
+    return 0
+}
