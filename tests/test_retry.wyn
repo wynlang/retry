@@ -1,19 +1,50 @@
-fn main() -> int {
-    Test.init("retry")
+test "attempt 0" {
     // Backoff calculation
     var base_ms = 100
     var attempt = 0
     var delay = base_ms
-    Test.assert_eq_int(delay, 100, "attempt 0")
+    assert_eq(delay, 100)
+}
+
+test "attempt 1" {
+    // Backoff calculation
+    var base_ms = 100
+    var attempt = 0
+    var delay = base_ms
     attempt = 1; delay = base_ms * 2
-    Test.assert_eq_int(delay, 200, "attempt 1")
+    assert_eq(delay, 200)
+}
+
+test "attempt 2" {
+    // Backoff calculation
+    var base_ms = 100
+    var attempt = 0
+    var delay = base_ms
+    attempt = 1; delay = base_ms * 2
     attempt = 2; delay = base_ms * 4
-    Test.assert_eq_int(delay, 400, "attempt 2")
+    assert_eq(delay, 400)
+}
+
+test "attempt 3" {
+    // Backoff calculation
+    var base_ms = 100
+    var attempt = 0
+    var delay = base_ms
+    attempt = 1; delay = base_ms * 2
+    attempt = 2; delay = base_ms * 4
     attempt = 3; delay = base_ms * 8
-    Test.assert_eq_int(delay, 800, "attempt 3")
+    assert_eq(delay, 800)
+}
+
+test "max cap" {
+    // Backoff calculation
+    var base_ms = 100
+    var attempt = 0
+    var delay = base_ms
+    attempt = 1; delay = base_ms * 2
+    attempt = 2; delay = base_ms * 4
+    attempt = 3; delay = base_ms * 8
     // Max cap
     if delay > 5000 { delay = 5000 }
-    Test.assert(delay <= 5000, "max cap")
-    Test.summary()
-    return 0
+    assert(delay <= 5000)
 }
