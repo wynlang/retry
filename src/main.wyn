@@ -1,0 +1,30 @@
+fn retry_delay(attempt: int, base_ms: int) -> int {
+    var multiplier = 1
+    for i in 0..attempt {
+        multiplier = multiplier * 2
+    }
+    return base_ms * multiplier
+}
+
+fn retry_delay_capped(attempt: int, base_ms: int, max_ms: int) -> int {
+    var delay = retry_delay(attempt, base_ms)
+    if delay > max_ms {
+        return max_ms
+    }
+    return delay
+}
+
+fn retry_should_retry(attempt: int, max_attempts: int) -> bool {
+    return attempt < max_attempts
+}
+
+fn main() {
+    var base = 100
+    var max = 5000
+    for i in 0..6 {
+        var delay = retry_delay(i, base)
+        var capped = retry_delay_capped(i, base, max)
+        var can_retry = retry_should_retry(i, 5)
+        println("attempt " + i.to_string() + ": delay=" + delay.to_string() + "ms capped=" + capped.to_string() + "ms retry=" + can_retry.to_string())
+    }
+}

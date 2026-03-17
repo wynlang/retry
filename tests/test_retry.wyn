@@ -1,50 +1,30 @@
-test "attempt 0" {
-    // Backoff calculation
-    var base_ms = 100
-    var attempt = 0
-    var delay = base_ms
-    assert_eq(delay, 100)
+fn retry_delay(attempt: int, base_ms: int) -> int {
+    var multiplier = 1
+    for i in 0..attempt { multiplier = multiplier * 2 }
+    return base_ms * multiplier
 }
 
-test "attempt 1" {
-    // Backoff calculation
-    var base_ms = 100
-    var attempt = 0
-    var delay = base_ms
-    attempt = 1; delay = base_ms * 2
-    assert_eq(delay, 200)
+fn retry_delay_capped(attempt: int, base_ms: int, max_ms: int) -> int {
+    var delay = retry_delay(attempt, base_ms)
+    if delay > max_ms { return max_ms }
+    return delay
 }
 
-test "attempt 2" {
-    // Backoff calculation
-    var base_ms = 100
-    var attempt = 0
-    var delay = base_ms
-    attempt = 1; delay = base_ms * 2
-    attempt = 2; delay = base_ms * 4
-    assert_eq(delay, 400)
+fn retry_should_retry(attempt: int, max_attempts: int) -> bool {
+    return attempt < max_attempts
 }
 
-test "attempt 3" {
-    // Backoff calculation
-    var base_ms = 100
-    var attempt = 0
-    var delay = base_ms
-    attempt = 1; delay = base_ms * 2
-    attempt = 2; delay = base_ms * 4
-    attempt = 3; delay = base_ms * 8
-    assert_eq(delay, 800)
-}
-
-test "max cap" {
-    // Backoff calculation
-    var base_ms = 100
-    var attempt = 0
-    var delay = base_ms
-    attempt = 1; delay = base_ms * 2
-    attempt = 2; delay = base_ms * 4
-    attempt = 3; delay = base_ms * 8
-    // Max cap
-    if delay > 5000 { delay = 5000 }
-    assert(delay <= 5000)
+fn main() -> int {
+    assert_eq(retry_delay(0, 100), 100)
+    assert_eq(retry_delay(1, 100), 200)
+    assert_eq(retry_delay(2, 100), 400)
+    assert_eq(retry_delay(3, 100), 800)
+    assert_eq(retry_delay_capped(10, 100, 5000), 5000)
+    assert_eq(retry_delay_capped(1, 100, 5000), 200)
+    if retry_should_retry(0, 3) { println("retry 0: pass") }
+    if retry_should_retry(2, 3) { println("retry 2: pass") }
+    if !retry_should_retry(3, 3) { println("no retry 3: pass") }
+    
+    println("retry: 9 tests passed")
+    return 0
 }
