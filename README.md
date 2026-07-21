@@ -1,4 +1,4 @@
-# retry — Official Wyn Package
+# retry - Official Wyn Package
 
 Retry with exponential backoff. Pure Wyn.
 
