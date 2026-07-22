@@ -23,7 +23,7 @@ fn main() -> int {
     assert_eq(retry_delay_capped(1, 100, 5000), 200)
     if retry_should_retry(0, 3) { println("retry 0: pass") }
     if retry_should_retry(2, 3) { println("retry 2: pass") }
-    if !retry_should_retry(3, 3) { println("no retry 3: pass") }
+    if not retry_should_retry(3, 3) { println("no retry 3: pass") }
     
     println("retry: 9 tests passed")
     return 0
